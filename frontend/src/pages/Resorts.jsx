@@ -4,7 +4,15 @@ import { motion } from "framer-motion";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { FaClock, FaLeaf, FaArrowRight, FaMapMarkerAlt } from "react-icons/fa";
+import {
+  FaMapMarkerAlt,
+  FaWifi,
+  FaSwimmingPool,
+  FaUtensils,
+  FaLeaf,
+  FaArrowRight,
+  FaStar,
+} from "react-icons/fa";
 
 /* ── Animation Variants ───────────────────────────────── */
 const fadeUp = (delay = 0) => ({
@@ -32,21 +40,28 @@ const cardVariants = {
 
 /* ── Stats ────────────────────────────────────────────── */
 const stats = [
-  { icon: "🗺️", value: "50+", label: "Destinations" },
-  { icon: "🦁", value: "200+", label: "Species" },
-  { icon: "😊", value: "15K+", label: "Adventurers" },
-  { icon: "⭐", value: "4.9", label: "Avg Rating" },
+  { icon: "🏨", value: "30+", label: "Luxury Resorts" },
+  { icon: "🌿", value: "100%", label: "Eco-Certified" },
+  { icon: "⭐", value: "4.8", label: "Avg Rating" },
+  { icon: "😊", value: "10K+", label: "Happy Guests" },
 ];
 
+/* ── Amenity Icon Map ─────────────────────────────────── */
+const AmenityIcons = () => (
+  <div className="flex items-center gap-3 text-emerald-500">
+    <FaWifi size={14} title="WiFi" />
+    <FaSwimmingPool size={14} title="Pool" />
+    <FaUtensils size={14} title="Restaurant" />
+  </div>
+);
+
 /* ── Component ────────────────────────────────────────── */
-const Safari = () => {
-  const [safariPackages, setSafariPackages] = useState([]);
+const Resorts = () => {
+  const [resortPackages, setResortPackages] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState("All");
 
   useEffect(() => {
-    const link = document.querySelector("#poppins-link");
-    if (!link) {
+    if (!document.querySelector("#poppins-link")) {
       const el = document.createElement("link");
       el.id = "poppins-link";
       el.href =
@@ -57,20 +72,22 @@ const Safari = () => {
   }, []);
 
   useEffect(() => {
-    const fetchSafaris = async () => {
+    const fetchResorts = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/admin/safari");
-        setSafariPackages(response.data.safaris || []);
+        const response = await axios.get("http://localhost:5000/admin/resort");
+        if (response.data.success) {
+          setResortPackages(response.data.resorts || []);
+        }
       } catch (error) {
-        console.error("Error fetching safaris:", error);
+        console.error("Fetch Error:", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchSafaris();
+    fetchResorts();
   }, []);
 
-  /* ── Loading State ──────────────────────────────────── */
+  /* ── Loading ──────────────────────────────────────────── */
   if (loading) {
     return (
       <div
@@ -79,7 +96,7 @@ const Safari = () => {
       >
         <div className="w-12 h-12 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin" />
         <p className="text-emerald-700 font-semibold text-lg tracking-wide">
-          Loading Safaris...
+          Loading Resorts...
         </p>
       </div>
     );
@@ -119,23 +136,23 @@ const Safari = () => {
               className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-emerald-200 text-xs font-semibold uppercase tracking-widest px-5 py-2 rounded-full backdrop-blur-sm"
             >
               <FaLeaf size={10} />
-              <span>Curated Wildlife Experiences</span>
+              <span>Eco-Luxury Accommodations</span>
             </motion.div>
 
             <motion.h1
               variants={fadeUp(0.1)}
-              className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight tracking-tight"
+              className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight tracking-tight max-w-3xl"
             >
-              Safari{" "}
-              <span className="text-amber-400">Adventures</span>
+              Luxury Resorts &{" "}
+              <span className="text-amber-400">Stays</span>
             </motion.h1>
 
             <motion.p
               variants={fadeUp(0.2)}
               className="text-emerald-100/80 text-base md:text-lg font-light leading-relaxed max-w-xl"
             >
-              Embark on unforgettable wildlife journeys through pristine
-              wilderness, guided by expert naturalists who know every trail.
+              Discover premium resorts and unforgettable stays surrounded by
+              nature, where modern comfort meets the wild.
             </motion.p>
 
             {/* Stat pills */}
@@ -169,7 +186,7 @@ const Safari = () => {
         </div>
       </section>
 
-      {/* ── Packages ────────────────────────────────────── */}
+      {/* ── Resort Grid ─────────────────────────────────── */}
       <section className="py-16 md:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           {/* Section header */}
@@ -184,38 +201,38 @@ const Safari = () => {
               variants={fadeUp(0)}
               className="text-emerald-600 text-xs font-semibold uppercase tracking-widest"
             >
-              What We Offer
+              Our Collection
             </motion.span>
             <motion.h2
               variants={fadeUp(0.1)}
               className="text-3xl md:text-4xl font-bold text-gray-900 mt-3 leading-tight"
             >
-              Choose Your{" "}
-              <span className="text-emerald-600">Safari Experience</span>
+              Discover Your{" "}
+              <span className="text-emerald-600">Perfect Resort</span>
             </motion.h2>
             <motion.p
               variants={fadeUp(0.2)}
               className="text-gray-500 text-sm md:text-base font-light mt-3 max-w-xl mx-auto leading-relaxed"
             >
-              Every journey is thoughtfully crafted to bring you closer to the
-              natural world while leaving the lightest footprint.
+              Handpicked eco-luxury properties where world-class comfort meets
+              pristine nature — each one certified sustainable.
             </motion.p>
           </motion.div>
 
           {/* Empty state */}
-          {safariPackages.length === 0 ? (
+          {resortPackages.length === 0 ? (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="flex flex-col items-center justify-center py-24 gap-5"
             >
-              <span className="text-6xl">🌿</span>
+              <span className="text-6xl">🏨</span>
               <p className="text-2xl font-bold text-gray-800">
-                No Safari Packages Found
+                No Resorts Found
               </p>
               <p className="text-gray-500 text-sm font-light max-w-sm text-center">
-                We're preparing incredible experiences. Check back soon or
-                contact us directly.
+                Our curated resort collection is being updated. Check back soon
+                or contact us directly.
               </p>
               <button className="mt-2 bg-emerald-600 text-white px-8 py-3 rounded-full font-semibold text-sm hover:bg-emerald-700 transition-all duration-300">
                 Contact Us
@@ -226,34 +243,42 @@ const Safari = () => {
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
               variants={{
                 hidden: {},
-                visible: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
+                visible: {
+                  transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+                },
               }}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-60px" }}
             >
-              {safariPackages.map((pkg, index) => (
+              {resortPackages.map((resort, index) => (
                 <motion.div
-                  key={pkg._id || index}
+                  key={resort._id || index}
                   variants={cardVariants}
                   className="group bg-white border border-gray-100 rounded-3xl shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-400 overflow-hidden flex flex-col"
                 >
                   {/* Image */}
                   <div className="relative h-56 overflow-hidden">
                     <img
-                      src={pkg.image}
-                      alt={pkg.name}
+                      src={resort.image || "https://placehold.co/500x300/d1fae5/065f46?text=Resort"}
+                      alt={resort.name}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       onError={(e) => {
                         e.target.src =
-                          "https://placehold.co/400x300/d1fae5/065f46?text=Safari";
+                          "https://placehold.co/500x300/d1fae5/065f46?text=Resort";
                       }}
                     />
 
+                    {/* Type badge */}
+                    <span className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-emerald-700 text-xs font-semibold px-3 py-1.5 rounded-full border border-emerald-100 shadow-sm">
+                      {resort.type || "Luxury Resort"}
+                    </span>
+
                     {/* Price badge */}
-                    <div className="absolute top-4 right-4 bg-amber-400 text-emerald-900 text-sm font-bold px-4 py-1.5 rounded-full shadow-md">
-                      {pkg.price}
-                    </div>
+                    <span className="absolute top-4 right-4 bg-amber-400 text-emerald-900 text-sm font-bold px-4 py-1.5 rounded-full shadow-md">
+                      ₹{resort.price || 0}
+                      <span className="text-xs font-medium opacity-80">/night</span>
+                    </span>
 
                     {/* Hover overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex items-end p-5">
@@ -265,61 +290,116 @@ const Safari = () => {
 
                   {/* Body */}
                   <div className="p-6 flex flex-col gap-3 flex-1">
-                    {/* Title */}
+                    {/* Name */}
                     <h3 className="text-gray-900 font-bold text-xl leading-snug">
-                      {pkg.name}
+                      {resort.name || "Unnamed Resort"}
                     </h3>
 
-                    {/* Meta row */}
-                    <div className="flex items-center gap-4 text-xs text-gray-500">
-                      <span className="flex items-center gap-1.5">
-                        <FaClock className="text-emerald-500" size={11} />
-                        {pkg.duration}
-                      </span>
-                      {pkg.location && (
-                        <span className="flex items-center gap-1.5">
-                          <FaMapMarkerAlt className="text-emerald-500" size={11} />
-                          {pkg.location}
-                        </span>
-                      )}
+                    {/* Location */}
+                    <div className="flex items-center gap-2 text-gray-500 text-xs font-light">
+                      <FaMapMarkerAlt size={11} className="text-emerald-500 flex-shrink-0" />
+                      <span>{resort.location || "Location not specified"}</span>
                     </div>
 
                     {/* Description */}
                     <p className="text-gray-500 text-sm font-light leading-relaxed line-clamp-2 flex-1">
-                      {pkg.description}
+                      {resort.description ||
+                        "A wonderful place to spend quality time with your loved ones surrounded by nature."}
                     </p>
 
-                    {/* Highlights */}
-                    {(pkg.highlights || []).length > 0 && (
-                      <div className="space-y-1.5 pt-1">
-                        {(pkg.highlights || []).slice(0, 2).map((h, idx) => (
-                          <p
-                            key={idx}
-                            className="flex items-center gap-2 text-xs text-gray-600 font-light"
-                          >
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0" />
-                            {h}
-                          </p>
-                        ))}
+                    {/* Amenity tags */}
+                    {(Array.isArray(resort.amenities) ? resort.amenities : []).length > 0 && (
+                      <div className="flex flex-wrap gap-2 pt-1">
+                        {(Array.isArray(resort.amenities) ? resort.amenities : [])
+                          .slice(0, 3)
+                          .map((amenity, idx) => (
+                            <span
+                              key={idx}
+                              className="bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs font-medium px-3 py-1 rounded-full"
+                            >
+                              {amenity}
+                            </span>
+                          ))}
+                        {resort.amenities?.length > 3 && (
+                          <span className="bg-gray-50 border border-gray-100 text-gray-500 text-xs font-medium px-3 py-1 rounded-full">
+                            +{resort.amenities.length - 3} more
+                          </span>
+                        )}
                       </div>
                     )}
 
-                    {/* CTA */}
-                    <Link
-                      to={`/safari/${pkg._id}`}
-                      className="mt-4 group/btn inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm py-3 rounded-2xl transition-all duration-300 hover:scale-[1.02] shadow-sm shadow-emerald-100"
-                    >
-                      View Details
-                      <FaArrowRight
-                        size={11}
-                        className="group-hover/btn:translate-x-1 transition-transform duration-300"
-                      />
-                    </Link>
+                    {/* Icons row + CTA */}
+                    <div className="flex items-center justify-between pt-2 border-t border-gray-50 mt-1">
+                      <AmenityIcons />
+                      <Link
+                        to={`/resorts/${resort._id}`}
+                        className="group/btn inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-4 py-2 rounded-full transition-all duration-300 hover:scale-105 shadow-sm shadow-emerald-100"
+                      >
+                        View Details
+                        <FaArrowRight
+                          size={10}
+                          className="group-hover/btn:translate-x-0.5 transition-transform duration-300"
+                        />
+                      </Link>
+                    </div>
                   </div>
                 </motion.div>
               ))}
             </motion.div>
           )}
+        </div>
+      </section>
+
+      {/* ── Why Stay With Us ────────────────────────────── */}
+      <section className="py-16 md:py-20 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-6">
+          <motion.div
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={stagger}
+            className="text-center mb-12"
+          >
+            <motion.span
+              variants={fadeUp(0)}
+              className="text-emerald-600 text-xs font-semibold uppercase tracking-widest"
+            >
+              Why Choose Us
+            </motion.span>
+            <motion.h2
+              variants={fadeUp(0.1)}
+              className="text-3xl md:text-4xl font-bold text-gray-900 mt-3 leading-tight"
+            >
+              The{" "}
+              <span className="text-emerald-600">WildLifeStay</span>{" "}
+              Difference
+            </motion.h2>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-60px" }}
+            variants={stagger}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
+          >
+            {[
+              { icon: "🌿", title: "Eco-Certified", desc: "Every resort meets our strict sustainability standards" },
+              { icon: "🛎️", title: "Premium Service", desc: "24/7 concierge and dedicated guest experience teams" },
+              { icon: "📸", title: "Scenic Locations", desc: "Handpicked spots inside or adjacent to protected zones" },
+              { icon: "💳", title: "Best Price", desc: "Transparent pricing with no hidden fees, ever" },
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                variants={fadeUp(i * 0.08)}
+                className="flex flex-col items-center text-center gap-3 bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-md hover:-translate-y-1 transition-all duration-300"
+              >
+                <span className="text-3xl">{item.icon}</span>
+                <p className="text-gray-900 font-semibold text-sm">{item.title}</p>
+                <p className="text-gray-500 text-xs font-light leading-snug">{item.desc}</p>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
@@ -341,34 +421,34 @@ const Safari = () => {
             variants={stagger}
           >
             <motion.span variants={fadeUp(0)} className="text-4xl block mb-4">
-              🐾
+              🏨
             </motion.span>
             <motion.h2
               variants={fadeUp(0.1)}
               className="text-3xl md:text-4xl font-extrabold text-white mb-4 leading-tight"
             >
-              Can't Find Your Perfect Safari?
+              Can't Find Your Dream Stay?
             </motion.h2>
             <motion.p
               variants={fadeUp(0.2)}
               className="text-emerald-100 text-base font-light mb-10 leading-relaxed"
             >
-              Our expert team crafts fully bespoke safari itineraries tailored
-              to your interests, pace, and budget.
+              Our team curates bespoke resort packages tailored to your
+              preferences, travel dates, and group size.
             </motion.p>
             <motion.div
               variants={fadeUp(0.3)}
               className="flex flex-col sm:flex-row gap-4 justify-center"
             >
               <button className="group inline-flex items-center justify-center gap-3 bg-white text-emerald-700 px-10 py-4 rounded-full font-bold text-sm hover:bg-emerald-50 transition-all duration-300 shadow-xl hover:scale-105">
-                Plan Custom Safari
+                Plan Custom Stay
                 <FaArrowRight
                   size={11}
                   className="group-hover:translate-x-1 transition-transform duration-300"
                 />
               </button>
               <button className="inline-flex items-center justify-center border-2 border-white/50 text-white px-10 py-4 rounded-full font-semibold text-sm hover:bg-white/10 hover:border-white transition-all duration-300">
-                Contact Our Team
+                Talk to Our Team
               </button>
             </motion.div>
           </motion.div>
@@ -380,4 +460,4 @@ const Safari = () => {
   );
 };
 
-export default Safari;
+export default Resorts;
